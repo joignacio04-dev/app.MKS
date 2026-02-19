@@ -128,9 +128,10 @@ Y = k \cdot A
 # Cambio 1: Modificar la conclusión para hablar de A y no de G
 st.info(f"""
 **Análisis actual:**
-El Gasto Autónomo total ($A$) es de **${A_actual:.2f}** y el multiplicador ($k$) es **{k_actual:.2f}**. 
-Por cada **$1** de variación del Gasto Autónomo ($A$), el Ingreso ($Y$) varía en **${k_actual:.2f}**.
+El Gasto Autónomo total ($A$) es de **${A_actual:.2f} y el multiplicador ($k$) es {k_actual:.2f}. 
+Por cada $1 de variación del Gasto Autónomo ($A$), el Ingreso ($Y$) varía en **${k_actual:.2f}**.
 
 (Es decir, $\Delta Y = k \cdot \Delta A$)
 """)
+
 
