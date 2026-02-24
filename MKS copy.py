@@ -27,7 +27,7 @@ if 'base_Y_islm' not in st.session_state:
 # --- TÍTULO PRINCIPAL ---
 st.title("📊 Simuladores Macroeconómicos")
 st.markdown("Modelo completo interactivo: Mercado de Bienes, Mercado Monetario y Equilibrio General (IS-LM).")
-
+st.markdown("Por José Ignacio Alba Posse")
 # ==========================================
 # BARRA LATERAL UNIFICADA (PANEL DE CONTROL)
 st.sidebar.header("⚙️ Panel de Control Global")
@@ -272,4 +272,5 @@ with tab3:
     with col_eq2:
         st.markdown("**Curva LM**")
         st.latex(r''' i = \frac{k_Y}{h} \cdot Y - \frac{M^s/P}{h} ''')
+
 
