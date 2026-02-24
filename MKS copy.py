@@ -2,10 +2,10 @@ import streamlit as st
 import numpy as np
 import matplotlib.pyplot as plt
 
-# --- CONFIGURACIÓN DE LA PÁGINA ---
+# --- CONFIGURACIÓN DE LA PÁGINA
 st.set_page_config(page_title="Simulador Macro I", layout="wide")
 
-# --- ESTADOS DE LA SESIÓN (Memoria para estática comparativa) ---
+# --- ESTADOS DE LA SESIÓN
 # Tab 1
 if 'base_A' not in st.session_state:
     st.session_state.base_A = None
@@ -30,10 +30,9 @@ st.markdown("Modelo completo interactivo: Mercado de Bienes, Mercado Monetario y
 
 # ==========================================
 # BARRA LATERAL UNIFICADA (PANEL DE CONTROL)
-# ==========================================
 st.sidebar.header("⚙️ Panel de Control Global")
 
-# -- SECCIÓN 1: Mercado de Bienes --
+# -- SECCIÓN 1: Mercado de Bienes
 st.sidebar.markdown("---")
 st.sidebar.subheader("📦 Mercado de Bienes")
 st.sidebar.caption("Afecta: Cruz Keynesiana (Tab 1) y Curva IS (Tab 3)")
@@ -51,31 +50,31 @@ st.sidebar.markdown("**Sector Externo**")
 X = st.sidebar.number_input("Exportaciones (X)", 0, 2000, 200, 50)
 M = st.sidebar.number_input("Importaciones (M)", 0, 2000, 100, 50)
 
-# -- SECCIÓN 2: Interacción IS-LM --
+# -- SECCIÓN 2: Interacción IS-LM
 st.sidebar.markdown("---")
-st.sidebar.subheader("🔗 Vinculación Bienes-Dinero")
+st.sidebar.subheader(" Vinculación Bienes-Dinero")
 st.sidebar.caption("Afecta: Solo Curva IS (Tab 3)")
 b = st.sidebar.slider("Sensibilidad de Inversión a tasa (b)", 10, 500, 100, 10)
 
-# -- SECCIÓN 3: Mercado de Dinero --
+# -- SECCIÓN 3: Mercado de Dinero
 st.sidebar.markdown("---")
-st.sidebar.subheader("💵 Mercado Monetario")
+st.sidebar.subheader("Mercado Monetario💵")
 st.sidebar.caption("Afecta: Mercado de Dinero (Tab 2) y Curva LM (Tab 3)")
 
 Ms = st.sidebar.slider("Oferta Monetaria Real (M/P)", 100, 2000, 800, 50)
 k_y = st.sidebar.slider("Sensibilidad L al Ingreso (k_Y)", 0.1, 1.0, 0.5, 0.05)
 h = st.sidebar.slider("Sensibilidad L a la Tasa (h)", 10, 200, 50, 10)
 
-# Ingreso Exógeno (Solo para ver el gráfico del Tab 2 de forma aislada)
+# Ingreso Exógeno 
 st.sidebar.markdown("**Variable Exógena (Solo Tab 2)**")
 Y_din = st.sidebar.slider("Nivel de Ingreso Exógeno (Y)", 1000, 5000, 2000, 100)
 
-# ==========================================
+
 # CREACIÓN DE PESTAÑAS (TABS)
 # ==========================================
 tab1, tab2, tab3 = st.tabs(["Mercado de Bienes (Keynes)", "Mercado de Dinero (Liquidez)", "Modelo IS-LM (Eq. General)"])
 
-# ==========================================
+
 # PESTAÑA 1: MERCADO DE BIENES
 # ==========================================
 with tab1:
@@ -150,33 +149,33 @@ with tab1:
     st.markdown("---")
     st.latex(r''' Y = \overbrace{\frac{1}{1 - c(1-t)}}^{k} \cdot \overbrace{[c_0 + I_0 + G + X - M + c \cdot TR - c \cdot T_0]}^{A} ''')
 
-# ==========================================
+
 # PESTAÑA 2: MERCADO DE DINERO
 # ==========================================
 with tab2:
     st.header("Equilibrio en el Mercado Monetario")
     
-    # Lógica Matemática Tab 2
+    #Matemática Tab 2
     def calcular_i_eq_tab2(Ms, Y, k_y, h):
         i = (k_y * Y - Ms) / h
         return i if i > 0 else 0 
 
     M_vals = np.linspace(0, 2500, 100)
-    # np.maximum evita que la curva de demanda de dinero baje de 0
+    #np.maximum evita que la curva de demanda de dinero baje de 0
     Md_vals_actual = np.maximum(0, (k_y * Y_din - M_vals) / h)
     i_actual = calcular_i_eq_tab2(Ms, Y_din, k_y, h)
 
-    # Botón Base
-    if st.button("📌 Fijar Escenario Base (Monetario)", key="btn_dinero"):
+    #Botón Base
+    if st.button("Fijar Escenario Base (Monetario📌 )", key="btn_dinero"):
         st.session_state.base_Ms = Ms
         st.session_state.base_i = i_actual
         st.session_state.base_Md_vals = Md_vals_actual
 
-    # Métricas
+    #Métricas
     delta_i = i_actual - st.session_state.base_i if st.session_state.base_i is not None else None
     st.metric("Tasa de Interés de Equilibrio (i*)", f"{i_actual:.2f}%", delta=f"{delta_i:.2f}%" if delta_i is not None else None)
 
-    # Gráfico Tab 2
+    #Gráfico Tab 2
     fig2, ax2 = plt.subplots(figsize=(10, 6))
 
     if st.session_state.base_Ms is not None:
@@ -204,7 +203,6 @@ with tab2:
     st.markdown("---")
     st.latex(r''' i^* = \frac{k_Y \cdot Y}{h} - \frac{M^s/P}{h} ''')
 
-# ==========================================
 # PESTAÑA 3: MODELO IS-LM
 # ==========================================
 with tab3:
@@ -274,3 +272,4 @@ with tab3:
     with col_eq2:
         st.markdown("**Curva LM**")
         st.latex(r''' i = \frac{k_Y}{h} \cdot Y - \frac{M^s/P}{h} ''')
+
